@@ -18,3 +18,6 @@ E, para que esse projeto seja próximo do nosso dia a dia, para elaboração do 
 O que esperamos para o entregável? Você deve enviar o link do Github do projeto do seu grupo incluindo o README preenchido com os passos para o build do seu projeto.
 
 Qualquer dúvida, não deixe de nos chamar no Discord para que alguém da equipe te ajude!
+
+
+Exemplo de projeto:. https://github.com/Vibra-team/rec
