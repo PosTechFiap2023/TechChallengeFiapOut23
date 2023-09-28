@@ -15,6 +15,7 @@ FASE 2 ######################################################################
 FASE 2 ######################################################################
 
 FASE 1 ######################################################################
+
 Projeto para uma escola organizar grupos de estudo e trabalho
 
 Requisitos:
@@ -26,9 +27,11 @@ Ter uma listagem para ver todos grupos e poder editar ou excluir eles
 Critério de aceite (requisito mínimo)
 Os alunos não podem ser cadastrados sem o RM (campo obrigatório)
 Os alunos não podem ser cadastrados em mais de um grupo
+
 FASE 1 ######################################################################
 
 PROPOSTA######################################################################
+
 # TechChallengeFiapOut23
 Tech Challenge é o projeto que englobará os conhecimentos obtidos em todas as disciplinas da fase. Esta é uma atividade que, a princípio, deve ser desenvolvida em grupo. É importante atentar-se ao prazo de entrega, uma vez que esta trata-se de uma atividade obrigatória: ela vale 60% da nota de todas as disciplinas da fase.
 
@@ -52,6 +55,7 @@ Qualquer dúvida, não deixe de nos chamar no Discord para que alguém da equipe
 
 
 Exemplo de projeto:. https://github.com/Vibra-team/rec
+
 PROPOSTA######################################################################
 
 ORIENTAÇÔES######################################################################
@@ -89,4 +93,5 @@ Requisitos:
 Como rodar o projeto
 
 Ou em um word essas etapas 
+
 ORIENTAÇÔES######################################################################
