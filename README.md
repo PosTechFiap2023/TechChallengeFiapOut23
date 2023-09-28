@@ -19,14 +19,14 @@ FASE 1 ######################################################################
 Projeto para uma escola organizar grupos de estudo e trabalho
 
 Requisitos:
-Ter uma api para cadastro de alunos
-Ter uma listagem para ver todos alunos e poder editar ou excluir eles
-Ter uma api para formação de grupos de trabalho
-Ter uma listagem para ver todos grupos e poder editar ou excluir eles
+- Ter uma api para cadastro de alunos
+- Ter uma listagem para ver todos alunos e poder editar ou excluir eles
+- Ter uma api para formação de grupos de trabalho
+- Ter uma listagem para ver todos grupos e poder editar ou excluir eles
 
 Critério de aceite (requisito mínimo)
-Os alunos não podem ser cadastrados sem o RM (campo obrigatório)
-Os alunos não podem ser cadastrados em mais de um grupo
+- Os alunos não podem ser cadastrados sem o RM (campo obrigatório)
+- Os alunos não podem ser cadastrados em mais de um grupo
 
 FASE 1 ######################################################################
 
