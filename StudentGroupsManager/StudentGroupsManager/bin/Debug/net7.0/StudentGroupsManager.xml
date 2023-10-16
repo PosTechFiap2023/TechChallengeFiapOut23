@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StudentGroupsManager</name>
+    </assembly>
+    <members>
+        <member name="M:StudentGroupsManager.Controllers.StudentGroupManagerController.GetStudent(System.Int32)">
+            <summary>
+            Obtem 1 estudante de acordo com o id 
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+            <remarks>
+            Exemplo:
+            
+            Enviar Id para requisição
+            </remarks>
+            <response code="200">Retorna Sucesso</response>
+            <response code="401">Não Autenticado</response>
+            <response code="403">Não Autorizado</response>
+        </member>
+    </members>
+</doc>

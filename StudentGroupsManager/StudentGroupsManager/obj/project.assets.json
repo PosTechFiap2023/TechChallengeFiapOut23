@@ -1888,23 +1888,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\magai\\.nuget\\packages\\": {},
+    "C:\\Users\\caffa\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Fiap\\TechChallengeFiapOut23\\StudentGroupsManager\\StudentGroupsManager\\StudentGroupsManager.csproj",
+      "projectUniqueName": "C:\\Projects\\Fiap\\TechChallengeFiapOut23\\StudentGroupsManager\\StudentGroupsManager\\StudentGroupsManager.csproj",
       "projectName": "StudentGroupsManager",
-      "projectPath": "C:\\Fiap\\TechChallengeFiapOut23\\StudentGroupsManager\\StudentGroupsManager\\StudentGroupsManager.csproj",
-      "packagesPath": "C:\\Users\\magai\\.nuget\\packages\\",
-      "outputPath": "C:\\Fiap\\TechChallengeFiapOut23\\StudentGroupsManager\\StudentGroupsManager\\obj\\",
+      "projectPath": "C:\\Projects\\Fiap\\TechChallengeFiapOut23\\StudentGroupsManager\\StudentGroupsManager\\StudentGroupsManager.csproj",
+      "packagesPath": "C:\\Users\\caffa\\.nuget\\packages\\",
+      "outputPath": "C:\\Projects\\Fiap\\TechChallengeFiapOut23\\StudentGroupsManager\\StudentGroupsManager\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\magai\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\caffa\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
