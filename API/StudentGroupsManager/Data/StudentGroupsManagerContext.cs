@@ -19,5 +19,7 @@ namespace StudentGroupsManager.Data
         public DbSet<Student> Students { get; set; } = default!;
 
         public DbSet<TeacherCoordinator> TeacherCoordinators { get; set; } = default!;
+
+        public DbSet<Parametros> Parametros { get; set; }
     }
 }

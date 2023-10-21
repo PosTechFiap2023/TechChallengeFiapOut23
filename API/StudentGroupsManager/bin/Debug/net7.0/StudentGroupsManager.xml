@@ -18,6 +18,77 @@
             <response code="401">Não Autenticado</response>
             <response code="403">Não Autorizado</response>
         </member>
+        <member name="M:StudentGroupsManager.Controllers.ParametrosController.GetParametros">
+            <summary>
+            Obtem Lista de parametros 
+            </summary>
+            <param></param>
+            <returns></returns>
+            <remarks>
+            Exemplo:
+            
+            </remarks>
+            <response code="200">Retorna Sucesso</response>
+            <response code="401">Não Autenticado</response>
+            <response code="403">Não Autorizado</response>
+        </member>
+        <member name="M:StudentGroupsManager.Controllers.ParametrosController.GetParametros(System.Int32)">
+            <summary>
+            Obtem 1 parametros de acordo com o id 
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+            <remarks>
+            Exemplo:
+            
+            Enviar Id para requisição
+            </remarks>
+            <response code="200">Retorna Sucesso</response>
+            <response code="401">Não Autenticado</response>
+            <response code="403">Não Autorizado</response>
+        </member>
+        <member name="M:StudentGroupsManager.Controllers.ParametrosController.PutParametros(System.Int32,StudentGroupsManager.Entity.Parametros)">
+            <summary>
+            Atualiza um parametro
+            </summary>
+            <param></param>
+            <returns></returns>
+            <remarks>
+            Exemplo:
+            
+            </remarks>
+            <response code="200">Retorna Sucesso</response>
+            <response code="401">Não Autenticado</response>
+            <response code="403">Não Autorizado</response>
+        </member>
+        <member name="M:StudentGroupsManager.Controllers.ParametrosController.PostParametros(StudentGroupsManager.Entity.Parametros)">
+            <summary>
+            Inclui um parametro
+            </summary>
+            <param></param>
+            <returns></returns>
+            <remarks>
+            Exemplo:
+            
+            </remarks>
+            <response code="200">Retorna Sucesso</response>
+            <response code="401">Não Autenticado</response>
+            <response code="403">Não Autorizado</response>
+        </member>
+        <member name="M:StudentGroupsManager.Controllers.ParametrosController.DeleteParametros(System.Int32)">
+            <summary>
+            Exclui um parametro
+            </summary>
+            <param></param>
+            <returns></returns>
+            <remarks>
+            Exemplo:
+            
+            </remarks>
+            <response code="200">Retorna Sucesso</response>
+            <response code="401">Não Autenticado</response>
+            <response code="403">Não Autorizado</response>
+        </member>
         <member name="M:StudentGroupsManager.Controllers.StudentsController.GetStudents">
             <summary>
             Obtem Lista de estudantes 
@@ -125,6 +196,30 @@
             <inheritdoc />
         </member>
         <member name="M:StudentGroupsManager.Migrations.VersaoStudentsTeacherCoordinator.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:StudentGroupsManager.Migrations.VersaoParametrosInicial">
+            <inheritdoc />
+        </member>
+        <member name="M:StudentGroupsManager.Migrations.VersaoParametrosInicial.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:StudentGroupsManager.Migrations.VersaoParametrosInicial.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:StudentGroupsManager.Migrations.VersaoParametrosInicial.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:StudentGroupsManager.Migrations.VParametrosIniComDBContext">
+            <inheritdoc />
+        </member>
+        <member name="M:StudentGroupsManager.Migrations.VParametrosIniComDBContext.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:StudentGroupsManager.Migrations.VParametrosIniComDBContext.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:StudentGroupsManager.Migrations.VParametrosIniComDBContext.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
     </members>
