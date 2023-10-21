@@ -5,6 +5,7 @@ C:\Git\TechChallengeFiapOut23\API\StudentGroupsManager\bin\Debug\net7.0\StudentG
 C:\Git\TechChallengeFiapOut23\API\StudentGroupsManager\bin\Debug\net7.0\StudentGroupsManager.runtimeconfig.json
 C:\Git\TechChallengeFiapOut23\API\StudentGroupsManager\bin\Debug\net7.0\StudentGroupsManager.dll
 C:\Git\TechChallengeFiapOut23\API\StudentGroupsManager\bin\Debug\net7.0\StudentGroupsManager.pdb
+C:\Git\TechChallengeFiapOut23\API\StudentGroupsManager\bin\Debug\net7.0\StudentGroupsManager.xml
 C:\Git\TechChallengeFiapOut23\API\StudentGroupsManager\bin\Debug\net7.0\Azure.Core.dll
 C:\Git\TechChallengeFiapOut23\API\StudentGroupsManager\bin\Debug\net7.0\Azure.Identity.dll
 C:\Git\TechChallengeFiapOut23\API\StudentGroupsManager\bin\Debug\net7.0\Dapper.dll
@@ -252,8 +253,7 @@ C:\Git\TechChallengeFiapOut23\API\StudentGroupsManager\obj\Debug\net7.0\scopedcs
 C:\Git\TechChallengeFiapOut23\API\StudentGroupsManager\obj\Debug\net7.0\StudentGroupsManager.csproj.CopyComplete
 C:\Git\TechChallengeFiapOut23\API\StudentGroupsManager\obj\Debug\net7.0\StudentGroupsManager.dll
 C:\Git\TechChallengeFiapOut23\API\StudentGroupsManager\obj\Debug\net7.0\refint\StudentGroupsManager.dll
+C:\Git\TechChallengeFiapOut23\API\StudentGroupsManager\obj\Debug\net7.0\StudentGroupsManager.xml
 C:\Git\TechChallengeFiapOut23\API\StudentGroupsManager\obj\Debug\net7.0\StudentGroupsManager.pdb
 C:\Git\TechChallengeFiapOut23\API\StudentGroupsManager\obj\Debug\net7.0\StudentGroupsManager.genruntimeconfig.cache
 C:\Git\TechChallengeFiapOut23\API\StudentGroupsManager\obj\Debug\net7.0\ref\StudentGroupsManager.dll
-C:\Git\TechChallengeFiapOut23\API\StudentGroupsManager\bin\Debug\net7.0\StudentGroupsManager.xml
-C:\Git\TechChallengeFiapOut23\API\StudentGroupsManager\obj\Debug\net7.0\StudentGroupsManager.xml
