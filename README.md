@@ -24,6 +24,8 @@ Requisitos:
 - Ter uma api para formação de grupos de trabalho
 - Ter uma listagem para ver todos grupos e poder editar ou excluir eles
 
+  A listagem completa dos requisitos pode ser visualizada no documento em anexo [Google Docs](https://docs.google.com/document/d/1aJUAMV5o3qD2xWro_lqz_SSLPPsHLtnYsmpt2oF7-Q4/edit?usp=sharing)
+
 Critério de aceite (requisito mínimo)
 - Os alunos não podem ser cadastrados sem o RM (campo obrigatório)
 - Os alunos não podem ser cadastrados em mais de um grupo
