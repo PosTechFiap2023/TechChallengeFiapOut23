@@ -2,7 +2,7 @@
 
 namespace StudentGroupsManager.Interface
 {
-    public interface IStudentRepository : IRepository<Student>
+    public interface ICourseRepository : IRepository<Course>
     {
     }
 }

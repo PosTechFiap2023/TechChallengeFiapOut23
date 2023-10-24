@@ -7,18 +7,24 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StudentGroupsManager.Data;
 using StudentGroupsManager.Entity;
+using StudentGroupsManager.Interface;
+using StudentGroupsManager.Repository;
+using StudentGroupsManager.Services;
 
 namespace StudentGroupsManager.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize(Roles = "TeacherCoordinators")]
     public class ParametrosController : ControllerBase
     {
-        private readonly StudentGroupsManagerContext _context;
+        private readonly ITokenService _tokenService;
+        private readonly IParametrosRepository _parametrosRepository;
 
-        public ParametrosController(StudentGroupsManagerContext context)
+        public ParametrosController(ITokenService tokenService, IParametrosRepository parametrosRepository)
         {
-            _context = context;
+            _tokenService = tokenService;
+            _parametrosRepository = parametrosRepository;
         }
 
         /// <summary>
@@ -35,9 +41,9 @@ namespace StudentGroupsManager.Controllers
         /// <response code="403">Não Autorizado</response>
         // GET: api/Parametros
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Parametros>>> GetParametros()
+        public ActionResult<IEnumerable<Parametros>> GetParametros()
         {
-            return await _context.Parametros.ToListAsync();
+            return Ok(_parametrosRepository.GetAll());
         }
 
         /// <summary>
@@ -55,16 +61,9 @@ namespace StudentGroupsManager.Controllers
         /// <response code="403">Não Autorizado</response>
         // GET: api/Parametros/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Parametros>> GetParametros(int id)
+        public ActionResult<Parametros> GetParametros(int id)
         {
-            var parametros = await _context.Parametros.FindAsync(id);
-
-            if (parametros == null)
-            {
-                return NotFound();
-            }
-
-            return parametros;
+            return Ok(_parametrosRepository.GetById(id));
         }
 
         /// <summary>
@@ -82,32 +81,15 @@ namespace StudentGroupsManager.Controllers
         // PUT: api/Parametros/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutParametros(int id, Parametros parametros)
+        public ActionResult PutParametros(int id, Parametros parametros)
         {
             if (id != parametros.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(parametros).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ParametrosExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            _parametrosRepository.Update(parametros);
+            return Ok();
         }
 
         /// <summary>
@@ -127,8 +109,11 @@ namespace StudentGroupsManager.Controllers
         [HttpPost]
         public async Task<ActionResult<Parametros>> PostParametros(Parametros parametros)
         {
-            _context.Parametros.Add(parametros);
-            await _context.SaveChangesAsync();
+            if (_parametrosRepository == null)
+            {
+                return Problem("Entity set 'StudentGroupsManagerContext.Parametros'  is null.");
+            }
+            _parametrosRepository.Insert(parametros);
 
             return CreatedAtAction("GetParametros", new { id = parametros.Id }, parametros);
         }
@@ -147,23 +132,21 @@ namespace StudentGroupsManager.Controllers
         /// <response code="403">Não Autorizado</response>
         // DELETE: api/Parametros/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteParametros(int id)
+        public async Task<IActionResult> DeleteParametros(Parametros parametros)
         {
-            var parametros = await _context.Parametros.FindAsync(id);
-            if (parametros == null)
+            if (_parametrosRepository == null)
+            {
+                return NotFound();
+            }
+            var T = _parametrosRepository.GetById(parametros.Id);
+            if (T == null)
             {
                 return NotFound();
             }
 
-            _context.Parametros.Remove(parametros);
-            await _context.SaveChangesAsync();
+            _parametrosRepository.Delete(parametros);
 
-            return NoContent();
-        }
-
-        private bool ParametrosExists(int id)
-        {
-            return _context.Parametros.Any(e => e.Id == id);
+            return CreatedAtAction("GetParametros", new { id = parametros.Id }, parametros);
         }
     }
 }

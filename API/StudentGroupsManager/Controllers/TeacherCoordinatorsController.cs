@@ -1,19 +1,26 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StudentGroupsManager.Data;
 using StudentGroupsManager.Entity;
+using StudentGroupsManager.Interface;
+using StudentGroupsManager.Repository;
+using StudentGroupsManager.Services;
 
 namespace StudentGroupsManager.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize(Roles = "TeacherCoordinators")]
     public class TeacherCoordinatorsController : ControllerBase
     {
-        private readonly StudentGroupsManagerContext _context;
+        private readonly ITokenService _tokenService;
+        private readonly ITeacherCoordinatorRepository _teacherCoordinatorRepository;
 
-        public TeacherCoordinatorsController(StudentGroupsManagerContext context)
+        public TeacherCoordinatorsController(ITokenService tokenService, ITeacherCoordinatorRepository teacherCoordinatorRepository)
         {
-            _context = context;
+            _tokenService = tokenService;
+            _teacherCoordinatorRepository = teacherCoordinatorRepository;
         }
 
         /// <summary>
@@ -30,102 +37,112 @@ namespace StudentGroupsManager.Controllers
         /// <response code="403">Não Autorizado</response>
         // GET: api/TeacherCoordinators
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TeacherCoordinator>>> GetTeacherCoordinators()
+        public ActionResult<IEnumerable<TeacherCoordinator>> GetTeacherCoordinators()
         {
-          if (_context.TeacherCoordinators == null)
-          {
-              return NotFound();
-          }
-            return await _context.TeacherCoordinators.ToListAsync();
+            return Ok(_teacherCoordinatorRepository.GetAll());
         }
 
+        /// <summary>
+        /// Obtem 1 professor ou coordenador de acordo com o id 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Exemplo:
+        /// 
+        /// Enviar Id para requisição
+        /// </remarks>
+        /// <response code="200">Retorna Sucesso</response>
+        /// <response code="401">Não Autenticado</response>
+        /// <response code="403">Não Autorizado</response>
         // GET: api/TeacherCoordinators/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<TeacherCoordinator>> GetTeacherCoordinator(int id)
+        public ActionResult<TeacherCoordinator> GetTeacherCoordinator(int id)
         {
-          if (_context.TeacherCoordinators == null)
-          {
-              return NotFound();
-          }
-            var teacherCoordinator = await _context.TeacherCoordinators.FindAsync(id);
-
-            if (teacherCoordinator == null)
-            {
-                return NotFound();
-            }
-
-            return teacherCoordinator;
+            return Ok(_teacherCoordinatorRepository.GetById(id));
         }
 
+        /// <summary>
+        /// Atualiza um professor ou coordenador
+        /// </summary>
+        /// <param></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Exemplo:
+        /// 
+        /// </remarks>
+        /// <response code="200">Retorna Sucesso</response>
+        /// <response code="401">Não Autenticado</response>
+        /// <response code="403">Não Autorizado</response>
         // PUT: api/TeacherCoordinators/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTeacherCoordinator(int id, TeacherCoordinator teacherCoordinator)
+        public ActionResult PutTeacherCoordinator(int id, TeacherCoordinator teacherCoordinator)
         {
             if (id != teacherCoordinator.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(teacherCoordinator).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TeacherCoordinatorExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            _teacherCoordinatorRepository.Update(teacherCoordinator);
+            return Ok();
         }
 
+        /// <summary>
+        /// Inclui um professor ou coordenador
+        /// </summary>
+        /// <param></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Exemplo:
+        /// 
+        /// </remarks>
+        /// <response code="200">Retorna Sucesso</response>
+        /// <response code="401">Não Autenticado</response>
+        /// <response code="403">Não Autorizado</response>
         // POST: api/TeacherCoordinators
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<TeacherCoordinator>> PostTeacherCoordinator(TeacherCoordinator teacherCoordinator)
+        public ActionResult<TeacherCoordinator> PostTeacherCoordinator(TeacherCoordinator teacherCoordinator)
         {
-          if (_context.TeacherCoordinators == null)
-          {
-              return Problem("Entity set 'StudentGroupsManagerContext.TeacherCoordinators'  is null.");
-          }
-            _context.TeacherCoordinators.Add(teacherCoordinator);
-            await _context.SaveChangesAsync();
+            if (_teacherCoordinatorRepository == null)
+            {
+                return Problem("Entity set 'StudentGroupsManagerContext.Students'  is null.");
+            }
+            _teacherCoordinatorRepository.Insert(teacherCoordinator);
 
             return CreatedAtAction("GetTeacherCoordinator", new { id = teacherCoordinator.Id }, teacherCoordinator);
         }
 
+        /// <summary>
+        /// Exclui um professor ou coordenador
+        /// </summary>
+        /// <param></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Exemplo:
+        /// 
+        /// </remarks>
+        /// <response code="200">Retorna Sucesso</response>
+        /// <response code="401">Não Autenticado</response>
+        /// <response code="403">Não Autorizado</response>
         // DELETE: api/TeacherCoordinators/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTeacherCoordinator(int id)
+        public IActionResult DeleteTeacherCoordinator(TeacherCoordinator teacherCoordinator)
         {
-            if (_context.TeacherCoordinators == null)
+            if (_teacherCoordinatorRepository == null)
             {
                 return NotFound();
             }
-            var teacherCoordinator = await _context.TeacherCoordinators.FindAsync(id);
-            if (teacherCoordinator == null)
+            var T = _teacherCoordinatorRepository.GetById(teacherCoordinator.Id);
+            if (T == null)
             {
                 return NotFound();
             }
 
-            _context.TeacherCoordinators.Remove(teacherCoordinator);
-            await _context.SaveChangesAsync();
+            _teacherCoordinatorRepository.Delete(teacherCoordinator);
 
-            return NoContent();
-        }
-
-        private bool TeacherCoordinatorExists(int id)
-        {
-            return (_context.TeacherCoordinators?.Any(e => e.Id == id)).GetValueOrDefault();
+            return CreatedAtAction("GetTeacherCoordinator", new { id = teacherCoordinator.Id }, teacherCoordinator);
         }
     }
 }

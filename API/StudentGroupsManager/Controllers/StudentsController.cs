@@ -1,19 +1,26 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StudentGroupsManager.Data;
 using StudentGroupsManager.Entity;
+using StudentGroupsManager.Interface;
+using StudentGroupsManager.Repository;
+using StudentGroupsManager.Services;
 
 namespace StudentGroupsManager.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize(Roles = "Student")]
     public class StudentsController : ControllerBase
     {
-        private readonly StudentGroupsManagerContext _context;
+        private readonly ITokenService _tokenService;
+        private readonly IStudentRepository _studentRepository;
 
-        public StudentsController(StudentGroupsManagerContext context)
+        public StudentsController(ITokenService tokenService, IStudentRepository studentRepository)
         {
-            _context = context;
+            _tokenService = tokenService;
+            _studentRepository = studentRepository;
         }
 
         /// <summary>
@@ -30,13 +37,9 @@ namespace StudentGroupsManager.Controllers
         /// <response code="403">Não Autorizado</response>
         // GET: api/Students
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Student>>> GetStudents()
+        public ActionResult<IEnumerable<Student>> GetStudents()
         {
-          if (_context.Students == null)
-          {
-              return NotFound();
-          }
-            return await _context.Students.ToListAsync();
+            return Ok(_studentRepository.GetAll());
         }
 
         /// <summary>
@@ -54,20 +57,9 @@ namespace StudentGroupsManager.Controllers
         /// <response code="403">Não Autorizado</response>
         // GET: api/Students/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Student>> GetStudent(int id)
+        public ActionResult<Student> GetStudent(int id)
         {
-          if (_context.Students == null)
-          {
-              return NotFound();
-          }
-            var student = await _context.Students.FindAsync(id);
-
-            if (student == null)
-            {
-                return NotFound();
-            }
-
-            return student;
+            return Ok(_studentRepository.GetById(id));
         }
 
         /// <summary>
@@ -85,32 +77,15 @@ namespace StudentGroupsManager.Controllers
         // PUT: api/Students/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutStudent(int id, Student student)
+        public ActionResult PutStudent(int id, Student student)
         {
             if (id != student.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(student).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!StudentExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            _studentRepository.Update(student);
+            return Ok();
         }
 
         /// <summary>
@@ -128,14 +103,13 @@ namespace StudentGroupsManager.Controllers
         // POST: api/Students
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Student>> PostStudent(Student student)
+        public ActionResult<Student> PostStudent(Student student)
         {
-          if (_context.Students == null)
-          {
-              return Problem("Entity set 'StudentGroupsManagerContext.Students'  is null.");
-          }
-            _context.Students.Add(student);
-            await _context.SaveChangesAsync();
+            if (_studentRepository == null)
+            {
+                return Problem("Entity set 'StudentGroupsManagerContext.Students'  is null.");
+            }
+            _studentRepository.Insert(student);
 
             return CreatedAtAction("GetStudent", new { id = student.Id }, student);
         }
@@ -154,27 +128,21 @@ namespace StudentGroupsManager.Controllers
         /// <response code="403">Não Autorizado</response>
         // DELETE: api/Students/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteStudent(int id)
+        public IActionResult DeleteStudent(Student student)
         {
-            if (_context.Students == null)
+            if (_studentRepository == null)
             {
                 return NotFound();
             }
-            var student = await _context.Students.FindAsync(id);
-            if (student == null)
+            var T = _studentRepository.GetById(student.Id);
+            if (T == null)
             {
                 return NotFound();
             }
 
-            _context.Students.Remove(student);
-            await _context.SaveChangesAsync();
+            _studentRepository.Delete(student);
 
-            return NoContent();
-        }
-
-        private bool StudentExists(int id)
-        {
-            return (_context.Students?.Any(e => e.Id == id)).GetValueOrDefault();
+            return CreatedAtAction("GetStudent", new { id = student.Id }, student);
         }
     }
 }
