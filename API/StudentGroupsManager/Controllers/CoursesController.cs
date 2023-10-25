@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StudentGroupsManager.Data;
 using StudentGroupsManager.Entity;
@@ -29,6 +30,7 @@ namespace StudentGroupsManager.Controllers
         /// <response code="401">Não Autenticado</response>
         /// <response code="403">Não Autorizado</response>
         // GET: api/Courses
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Course>>> GetCourses()
         {
@@ -40,6 +42,7 @@ namespace StudentGroupsManager.Controllers
         }
 
         // GET: api/Courses/5
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<Course>> GetCourse(int id)
         {
@@ -59,6 +62,7 @@ namespace StudentGroupsManager.Controllers
 
         // PUT: api/Courses/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Roles = "Teacher")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCourse(int id, Course course)
         {
@@ -90,6 +94,7 @@ namespace StudentGroupsManager.Controllers
 
         // POST: api/Courses
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Roles = "Teacher")]
         [HttpPost]
         public async Task<ActionResult<Course>> PostCourse(Course course)
         {
@@ -104,6 +109,7 @@ namespace StudentGroupsManager.Controllers
         }
 
         // DELETE: api/Courses/5
+        [Authorize(Roles = "Teacher")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCourse(int id)
         {

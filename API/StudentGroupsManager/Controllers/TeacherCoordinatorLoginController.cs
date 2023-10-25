@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using StudentGroupsManager.DTO;
 using StudentGroupsManager.Interface;
 using StudentGroupsManager.Services;

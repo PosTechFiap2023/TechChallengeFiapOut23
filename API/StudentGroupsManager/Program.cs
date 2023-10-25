@@ -1,15 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using StudentGroupsManager.Data;
-using StudentGroupsManager.Controllers;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using StudentGroupsManager.Data;
+using StudentGroupsManager.Interface;
+using StudentGroupsManager.Logging;
+using StudentGroupsManager.Repository;
+using StudentGroupsManager.Services;
 using System.Reflection;
 using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using StudentGroupsManager.Repository;
-using StudentGroupsManager.Interface;
-using StudentGroupsManager.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -62,6 +61,12 @@ builder.Services.AddSwaggerGen(c =>
             }
         });
 });
+
+builder.Logging.ClearProviders();
+builder.Logging.AddProvider(new CustomLoggerProvider(new CustomLoggerProviderConfiguration()
+{
+    LogLevel = LogLevel.Information
+}));
 
 var configurarion = new ConfigurationBuilder()
                     .AddJsonFile("appsettings.json")

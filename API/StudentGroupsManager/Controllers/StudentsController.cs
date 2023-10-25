@@ -12,10 +12,11 @@ namespace StudentGroupsManager.Controllers
     public class StudentsController : ControllerBase
     {
         private readonly StudentGroupsManagerContext _context;
-
-        public StudentsController(StudentGroupsManagerContext context)
+        private ILogger<StudentsController> _logger;
+        public StudentsController(StudentGroupsManagerContext context, ILogger<StudentsController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         /// <summary>
@@ -36,6 +37,7 @@ namespace StudentGroupsManager.Controllers
         {
           if (_context.Students == null)
           {
+                
               return NotFound();
           }
             return await _context.Students.ToListAsync();
@@ -66,6 +68,7 @@ namespace StudentGroupsManager.Controllers
 
             if (student == null)
             {
+                _logger.LogInformation("Não foi encontrato estudante com o id informado!");
                 return NotFound();
             }
 
