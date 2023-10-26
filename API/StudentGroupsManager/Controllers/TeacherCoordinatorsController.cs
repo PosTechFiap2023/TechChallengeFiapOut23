@@ -1,11 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using StudentGroupsManager.Data;
 using StudentGroupsManager.Entity;
 using StudentGroupsManager.Interface;
-using StudentGroupsManager.Repository;
-using StudentGroupsManager.Services;
 
 namespace StudentGroupsManager.Controllers
 {
@@ -14,13 +10,13 @@ namespace StudentGroupsManager.Controllers
     //[Authorize(Roles = "TeacherCoordinators")]
     public class TeacherCoordinatorsController : ControllerBase
     {
-        private readonly ITokenService _tokenService;
+        private ILogger<StudentsController> _logger;
         private readonly ITeacherCoordinatorRepository _teacherCoordinatorRepository;
 
-        public TeacherCoordinatorsController(ITokenService tokenService, ITeacherCoordinatorRepository teacherCoordinatorRepository)
+        public TeacherCoordinatorsController(ITeacherCoordinatorRepository teacherCoordinatorRepository, ILogger<StudentsController> logger)
         {
-            _tokenService = tokenService;
             _teacherCoordinatorRepository = teacherCoordinatorRepository;
+            _logger = logger;
         }
 
         /// <summary>
@@ -36,6 +32,7 @@ namespace StudentGroupsManager.Controllers
         /// <response code="401">Não Autenticado</response>
         /// <response code="403">Não Autorizado</response>
         // GET: api/TeacherCoordinators
+        //[Authorize]
         [HttpGet]
         public ActionResult<IEnumerable<TeacherCoordinator>> GetTeacherCoordinators()
         {
@@ -56,10 +53,17 @@ namespace StudentGroupsManager.Controllers
         /// <response code="401">Não Autenticado</response>
         /// <response code="403">Não Autorizado</response>
         // GET: api/TeacherCoordinators/5
+        //[Authorize]
         [HttpGet("{id}")]
         public ActionResult<TeacherCoordinator> GetTeacherCoordinator(int id)
         {
-            return Ok(_teacherCoordinatorRepository.GetById(id));
+            var teacherCoordinator = _teacherCoordinatorRepository.GetById(id);
+            if (teacherCoordinator == null)
+            {
+                _logger.LogInformation("Não foi encontrado professor ou coordenador com o id informado!");
+                return NotFound();
+            }
+            return Ok(teacherCoordinator);
         }
 
         /// <summary>
@@ -76,11 +80,13 @@ namespace StudentGroupsManager.Controllers
         /// <response code="403">Não Autorizado</response>
         // PUT: api/TeacherCoordinators/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        //[Authorize(Roles = "Teacher")]
         [HttpPut("{id}")]
         public ActionResult PutTeacherCoordinator(int id, TeacherCoordinator teacherCoordinator)
         {
             if (id != teacherCoordinator.Id)
             {
+                _logger.LogInformation("Requisição Inválida");
                 return BadRequest();
             }
 
@@ -102,6 +108,7 @@ namespace StudentGroupsManager.Controllers
         /// <response code="403">Não Autorizado</response>
         // POST: api/TeacherCoordinators
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        //[Authorize(Roles = "Teacher")]
         [HttpPost]
         public ActionResult<TeacherCoordinator> PostTeacherCoordinator(TeacherCoordinator teacherCoordinator)
         {
@@ -127,8 +134,9 @@ namespace StudentGroupsManager.Controllers
         /// <response code="401">Não Autenticado</response>
         /// <response code="403">Não Autorizado</response>
         // DELETE: api/TeacherCoordinators/5
+        //[Authorize(Roles = "Teacher")]
         [HttpDelete("{id}")]
-        public IActionResult DeleteTeacherCoordinator(TeacherCoordinator teacherCoordinator)
+        public ActionResult DeleteTeacherCoordinator(TeacherCoordinator teacherCoordinator)
         {
             if (_teacherCoordinatorRepository == null)
             {
@@ -137,6 +145,7 @@ namespace StudentGroupsManager.Controllers
             var T = _teacherCoordinatorRepository.GetById(teacherCoordinator.Id);
             if (T == null)
             {
+                _logger.LogInformation("Professor ou Coordenador não encontrado ao deletar");
                 return NotFound();
             }
 

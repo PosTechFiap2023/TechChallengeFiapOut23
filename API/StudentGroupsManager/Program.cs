@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using StudentGroupsManager.Repository;
 using StudentGroupsManager.Interface;
 using StudentGroupsManager.Services;
+using StudentGroupsManager.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -64,6 +65,13 @@ builder.Services.AddSwaggerGen(c =>
             }
         });
 });
+
+builder.Logging.ClearProviders();
+builder.Logging.AddProvider(new CustomLoggerProvider(new CustomLoggerProviderConfiguration()
+{
+    LogLevel = LogLevel.Information
+}));
+
 
 var configurarion = new ConfigurationBuilder()
                     .AddJsonFile("appsettings.json")

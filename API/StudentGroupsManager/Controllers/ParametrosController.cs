@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using StudentGroupsManager.Data;
 using StudentGroupsManager.Entity;
 using StudentGroupsManager.Interface;
-using StudentGroupsManager.Repository;
-using StudentGroupsManager.Services;
 
 namespace StudentGroupsManager.Controllers
 {
@@ -18,13 +10,13 @@ namespace StudentGroupsManager.Controllers
     //[Authorize(Roles = "TeacherCoordinators")]
     public class ParametrosController : ControllerBase
     {
-        private readonly ITokenService _tokenService;
+        private ILogger<StudentsController> _logger;
         private readonly IParametrosRepository _parametrosRepository;
 
-        public ParametrosController(ITokenService tokenService, IParametrosRepository parametrosRepository)
+        public ParametrosController(IParametrosRepository parametrosRepository, ILogger<StudentsController> logger)
         {
-            _tokenService = tokenService;
             _parametrosRepository = parametrosRepository;
+            _logger = logger;
         }
 
         /// <summary>
@@ -40,6 +32,7 @@ namespace StudentGroupsManager.Controllers
         /// <response code="401">Não Autenticado</response>
         /// <response code="403">Não Autorizado</response>
         // GET: api/Parametros
+        //[Authorize]
         [HttpGet]
         public ActionResult<IEnumerable<Parametros>> GetParametros()
         {
@@ -47,7 +40,7 @@ namespace StudentGroupsManager.Controllers
         }
 
         /// <summary>
-        /// Obtem 1 parametros de acordo com o id 
+        /// Obtem 1 parametro de acordo com o id 
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -59,10 +52,17 @@ namespace StudentGroupsManager.Controllers
         /// <response code="200">Retorna Sucesso</response>
         /// <response code="401">Não Autenticado</response>
         /// <response code="403">Não Autorizado</response>
-        // GET: api/Parametros/5
+        // GET: api/Parametro/5
+        //[Authorize]
         [HttpGet("{id}")]
-        public ActionResult<Parametros> GetParametros(int id)
+        public ActionResult<Parametros> GetParametro(int id)
         {
+            var parametro = _parametrosRepository.GetById(id);
+            if (parametro == null)
+            {
+                _logger.LogInformation("Não foi encontrado parametro com o id informado!");
+                return NotFound();
+            }
             return Ok(_parametrosRepository.GetById(id));
         }
 
@@ -80,11 +80,13 @@ namespace StudentGroupsManager.Controllers
         /// <response code="403">Não Autorizado</response>
         // PUT: api/Parametros/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        //[Authorize(Roles = "Teacher")]
         [HttpPut("{id}")]
         public ActionResult PutParametros(int id, Parametros parametros)
         {
             if (id != parametros.Id)
             {
+                _logger.LogInformation("Requisição Inválida");
                 return BadRequest();
             }
 
@@ -106,8 +108,9 @@ namespace StudentGroupsManager.Controllers
         /// <response code="403">Não Autorizado</response>
         // POST: api/Parametros
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        //[Authorize(Roles = "Teacher")]
         [HttpPost]
-        public async Task<ActionResult<Parametros>> PostParametros(Parametros parametros)
+        public ActionResult<Parametros> PostParametros(Parametros parametros)
         {
             if (_parametrosRepository == null)
             {
@@ -131,8 +134,9 @@ namespace StudentGroupsManager.Controllers
         /// <response code="401">Não Autenticado</response>
         /// <response code="403">Não Autorizado</response>
         // DELETE: api/Parametros/5
+        //[Authorize(Roles = "Teacher")]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteParametros(Parametros parametros)
+        public ActionResult DeleteParametros(Parametros parametros)
         {
             if (_parametrosRepository == null)
             {
@@ -141,6 +145,7 @@ namespace StudentGroupsManager.Controllers
             var T = _parametrosRepository.GetById(parametros.Id);
             if (T == null)
             {
+                _logger.LogInformation("Parametro não encontrado ao deletar");
                 return NotFound();
             }
 

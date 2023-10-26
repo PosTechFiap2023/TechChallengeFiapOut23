@@ -1,11 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using StudentGroupsManager.Data;
 using StudentGroupsManager.Entity;
 using StudentGroupsManager.Interface;
-using StudentGroupsManager.Repository;
-using StudentGroupsManager.Services;
 
 namespace StudentGroupsManager.Controllers
 {
@@ -14,13 +10,13 @@ namespace StudentGroupsManager.Controllers
     //[Authorize(Roles = "Student")]
     public class StudentsController : ControllerBase
     {
-        private readonly ITokenService _tokenService;
+        private ILogger<StudentsController> _logger;
         private readonly IStudentRepository _studentRepository;
 
-        public StudentsController(ITokenService tokenService, IStudentRepository studentRepository)
+        public StudentsController(IStudentRepository studentRepository, ILogger<StudentsController> logger)
         {
-            _tokenService = tokenService;
             _studentRepository = studentRepository;
+            _logger = logger;
         }
 
         /// <summary>
@@ -36,6 +32,7 @@ namespace StudentGroupsManager.Controllers
         /// <response code="401">Não Autenticado</response>
         /// <response code="403">Não Autorizado</response>
         // GET: api/Students
+        //[Authorize]
         [HttpGet]
         public ActionResult<IEnumerable<Student>> GetStudents()
         {
@@ -56,10 +53,17 @@ namespace StudentGroupsManager.Controllers
         /// <response code="401">Não Autenticado</response>
         /// <response code="403">Não Autorizado</response>
         // GET: api/Students/5
+        //[Authorize]
         [HttpGet("{id}")]
         public ActionResult<Student> GetStudent(int id)
         {
-            return Ok(_studentRepository.GetById(id));
+            var student = _studentRepository.GetById(id);
+            if (student == null)
+            {
+                _logger.LogInformation("Não foi encontrado estudente com o id informado!");
+                return NotFound();
+            }
+            return Ok(student);
         }
 
         /// <summary>
@@ -76,11 +80,13 @@ namespace StudentGroupsManager.Controllers
         /// <response code="403">Não Autorizado</response>
         // PUT: api/Students/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        //[Authorize(Roles = "Teacher")]
         [HttpPut("{id}")]
         public ActionResult PutStudent(int id, Student student)
         {
             if (id != student.Id)
             {
+                _logger.LogInformation("Requisição Inválida");
                 return BadRequest();
             }
 
@@ -102,6 +108,7 @@ namespace StudentGroupsManager.Controllers
         /// <response code="403">Não Autorizado</response>
         // POST: api/Students
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        //[Authorize(Roles = "Teacher")]
         [HttpPost]
         public ActionResult<Student> PostStudent(Student student)
         {
@@ -127,8 +134,9 @@ namespace StudentGroupsManager.Controllers
         /// <response code="401">Não Autenticado</response>
         /// <response code="403">Não Autorizado</response>
         // DELETE: api/Students/5
+        //[Authorize(Roles = "Teacher")]
         [HttpDelete("{id}")]
-        public IActionResult DeleteStudent(Student student)
+        public ActionResult DeleteStudent(Student student)
         {
             if (_studentRepository == null)
             {
@@ -137,6 +145,7 @@ namespace StudentGroupsManager.Controllers
             var T = _studentRepository.GetById(student.Id);
             if (T == null)
             {
+                _logger.LogInformation("Estudente não encontrado ao deletar");
                 return NotFound();
             }
 

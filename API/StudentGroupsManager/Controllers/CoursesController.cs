@@ -1,11 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using StudentGroupsManager.Data;
 using StudentGroupsManager.Entity;
 using StudentGroupsManager.Interface;
-using StudentGroupsManager.Repository;
-using StudentGroupsManager.Services;
 
 namespace StudentGroupsManager.Controllers
 {
@@ -14,13 +10,13 @@ namespace StudentGroupsManager.Controllers
     //[Authorize(Roles = "TeacherCoordinators")]
     public class CoursesController : ControllerBase
     {
-        private readonly ITokenService _tokenService;
+        private ILogger<StudentsController> _logger;
         private readonly ICourseRepository _courseRepository;
 
-        public CoursesController(ITokenService tokenService, ICourseRepository courseRepository)
+        public CoursesController(ICourseRepository courseRepository, ILogger<StudentsController> logger)
         {
-            _tokenService = tokenService;
             _courseRepository = courseRepository;
+            _logger = logger;
         }
 
         /// <summary>
@@ -36,6 +32,7 @@ namespace StudentGroupsManager.Controllers
         /// <response code="401">Não Autenticado</response>
         /// <response code="403">Não Autorizado</response>
         // GET: api/Courses
+        //[Authorize]
         [HttpGet]
         public ActionResult<IEnumerable<Course>> GetCourses()
         {
@@ -56,10 +53,17 @@ namespace StudentGroupsManager.Controllers
         /// <response code="401">Não Autenticado</response>
         /// <response code="403">Não Autorizado</response>
         // GET: api/Courses/5
+        //[Authorize]
         [HttpGet("{id}")]
         public ActionResult<Course> GetCourse(int id)
         {
-            return Ok(_courseRepository.GetById(id));
+            var course = _courseRepository.GetById(id);
+            if (course == null)
+            {
+                _logger.LogInformation("Não foi encontrado curso com o id informado!");
+                return NotFound();
+            }
+            return Ok(course);
         }
 
         /// <summary>
@@ -76,11 +80,13 @@ namespace StudentGroupsManager.Controllers
         /// <response code="403">Não Autorizado</response>
         // PUT: api/Courses/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        //[Authorize(Roles = "Teacher")]
         [HttpPut("{id}")]
         public ActionResult PutCourse(int id, Course course)
         {
             if (id != course.Id)
             {
+                _logger.LogInformation("Requisição Inválida");
                 return BadRequest();
             }
 
@@ -102,6 +108,7 @@ namespace StudentGroupsManager.Controllers
         /// <response code="403">Não Autorizado</response>
         // POST: api/Courses
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        //[Authorize(Roles = "Teacher")]
         [HttpPost]
         public ActionResult<Course> PostCourse(Course course)
         {
@@ -127,6 +134,7 @@ namespace StudentGroupsManager.Controllers
         /// <response code="401">Não Autenticado</response>
         /// <response code="403">Não Autorizado</response>
         // DELETE: api/Courses/5
+        //[Authorize(Roles = "Teacher")]
         [HttpDelete("{id}")]
         public ActionResult DeleteCourse(Course course)
         {
@@ -137,6 +145,7 @@ namespace StudentGroupsManager.Controllers
             var T = _courseRepository.GetById(course.Id);
             if (T == null)
             {
+                _logger.LogInformation("Curso não encontrado ao deletar");
                 return NotFound();
             }
 
