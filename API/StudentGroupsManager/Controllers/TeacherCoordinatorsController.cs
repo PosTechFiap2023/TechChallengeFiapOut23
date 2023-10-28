@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StudentGroupsManager.Data;
 using StudentGroupsManager.Entity;
@@ -7,15 +8,22 @@ namespace StudentGroupsManager.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Teacher")]
     public class TeacherCoordinatorsController : ControllerBase
     {
         private readonly StudentGroupsManagerContext _context;
+        private ILogger<TeacherCoordinatorsController> _logger;
 
-        public TeacherCoordinatorsController(StudentGroupsManagerContext context)
+        #region TeacherCoordinatorsController
+        public TeacherCoordinatorsController(StudentGroupsManagerContext context,
+                                    ILogger<TeacherCoordinatorsController> logger)
         {
             _context = context;
+            _logger = logger;
         }
+        #endregion
 
+        #region GetTeacherCoordinators
         /// <summary>
         /// Obtem Lista de professores e coordenadores 
         /// </summary>
@@ -34,29 +42,61 @@ namespace StudentGroupsManager.Controllers
         {
           if (_context.TeacherCoordinators == null)
           {
-              return NotFound();
+                _logger.LogInformation("[TeacherCoordinatorsController > GetTeacherCoordinators] Não foi encontrado TeacherCoordinators no contexto.");
+                return NotFound();
           }
             return await _context.TeacherCoordinators.ToListAsync();
         }
+        #endregion
 
+        #region GetTeacherCoordinator
+        /// <summary>
+        /// Obtem 1 professor/coordenador de acordo com o id 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Exemplo:
+        /// 
+        /// Enviar Id para requisição
+        /// </remarks>
+        /// <response code="200">Retorna Sucesso</response>
+        /// <response code="401">Não Autenticado</response>
+        /// <response code="403">Não Autorizado</response>
         // GET: api/TeacherCoordinators/5
         [HttpGet("{id}")]
         public async Task<ActionResult<TeacherCoordinator>> GetTeacherCoordinator(int id)
         {
           if (_context.TeacherCoordinators == null)
           {
-              return NotFound();
+                _logger.LogInformation("[TeacherCoordinatorsController > GetTeacherCoordinator] Não foi encontrado TeacherCoordinators no contexto.");
+                return NotFound();
           }
             var teacherCoordinator = await _context.TeacherCoordinators.FindAsync(id);
 
             if (teacherCoordinator == null)
             {
+                _logger.LogInformation("[TeacherCoordinatorsController > GetTeacherCoordinator] Não foi possível localizar professor/coordenador com o id informado!");
                 return NotFound();
             }
 
             return teacherCoordinator;
         }
+        #endregion
 
+        #region PutTeacherCoordinator
+        /// <summary>
+        /// Atualiza um Professor/Coordenador
+        /// </summary>
+        /// <param></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Exemplo:
+        /// 
+        /// </remarks>
+        /// <response code="200">Retorna Sucesso</response>
+        /// <response code="401">Não Autenticado</response>
+        /// <response code="403">Não Autorizado</response>
         // PUT: api/TeacherCoordinators/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
@@ -64,6 +104,7 @@ namespace StudentGroupsManager.Controllers
         {
             if (id != teacherCoordinator.Id)
             {
+                _logger.LogInformation("[TeacherCoordinatorsController > PutTeacherCoordinator] O id informado é diferente da entidade professor/coordenador.");
                 return BadRequest();
             }
 
@@ -73,21 +114,37 @@ namespace StudentGroupsManager.Controllers
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException dbex)
             {
                 if (!TeacherCoordinatorExists(id))
                 {
+                    _logger.LogInformation("[TeacherCoordinatorsController > PutTeacherCoordinator] Não foi possível localizar professor/coordenador com o id informado!");
                     return NotFound();
                 }
                 else
                 {
+                    _logger.LogError($"[TeacherCoordinatorsController > PutTeacherCoordinator] Erro ao atualizar professor/coordenador com id {id}. Erro: {dbex.Message}", dbex);
                     throw;
                 }
             }
 
             return NoContent();
         }
+        #endregion
 
+        #region PostTeacherCoordinator
+        /// <summary>
+        /// Inclui um Professor/Coordenador
+        /// </summary>
+        /// <param></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Exemplo:
+        /// 
+        /// </remarks>
+        /// <response code="200">Retorna Sucesso</response>
+        /// <response code="401">Não Autenticado</response>
+        /// <response code="403">Não Autorizado</response>
         // POST: api/TeacherCoordinators
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
@@ -95,25 +152,42 @@ namespace StudentGroupsManager.Controllers
         {
           if (_context.TeacherCoordinators == null)
           {
-              return Problem("Entity set 'StudentGroupsManagerContext.TeacherCoordinators'  is null.");
+                _logger.LogInformation("[TeacherCoordinatorsController > PostTeacherCoordinator] Não foi encontrado TeacherCoordinators no contexto.");
+                return Problem("Entity set 'StudentGroupsManagerContext.TeacherCoordinators'  is null.");
           }
             _context.TeacherCoordinators.Add(teacherCoordinator);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetTeacherCoordinator", new { id = teacherCoordinator.Id }, teacherCoordinator);
         }
+        #endregion
 
+        #region DeleteTeacherCoordinator
+        /// <summary>
+        /// Exclui um professor/coordenador de acordo com o id 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Exemplo:
+        /// 
+        /// </remarks>
+        /// <response code="200">Retorna Sucesso</response>
+        /// <response code="401">Não Autenticado</response>
+        /// <response code="403">Não Autorizado</response>
         // DELETE: api/TeacherCoordinators/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTeacherCoordinator(int id)
         {
             if (_context.TeacherCoordinators == null)
             {
+                _logger.LogInformation("[TeacherCoordinatorsController > DeleteTeacherCoordinator] Não foi encontrado TeacherCoordinators no contexto.");
                 return NotFound();
             }
             var teacherCoordinator = await _context.TeacherCoordinators.FindAsync(id);
             if (teacherCoordinator == null)
             {
+                _logger.LogInformation("[TeacherCoordinatorsController > DeleteTeacherCoordinator] Não foi possível localizar professor/coordenador com o id informado!");
                 return NotFound();
             }
 
@@ -122,10 +196,13 @@ namespace StudentGroupsManager.Controllers
 
             return NoContent();
         }
+        #endregion
 
+        #region TeacherCoordinatorExists
         private bool TeacherCoordinatorExists(int id)
         {
             return (_context.TeacherCoordinators?.Any(e => e.Id == id)).GetValueOrDefault();
         }
+        #endregion
     }
 }
