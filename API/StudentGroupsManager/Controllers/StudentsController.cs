@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StudentGroupsManager.Data;
 using StudentGroupsManager.Entity;
@@ -8,22 +7,15 @@ namespace StudentGroupsManager.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Student")]
     public class StudentsController : ControllerBase
     {
         private readonly StudentGroupsManagerContext _context;
-        private ILogger<StudentsController> _logger;
 
-        #region StudentsController
-        public StudentsController(StudentGroupsManagerContext context,
-                                ILogger<StudentsController> logger)
+        public StudentsController(StudentGroupsManagerContext context)
         {
             _context = context;
-            _logger = logger;
         }
-        #endregion
 
-        #region GetStudents
         /// <summary>
         /// Obtem Lista de estudantes 
         /// </summary>
@@ -42,14 +34,11 @@ namespace StudentGroupsManager.Controllers
         {
           if (_context.Students == null)
           {
-              _logger.LogInformation("[StudentsController > GetStudents] Não foi encontrado Students no contexto.");
               return NotFound();
           }
             return await _context.Students.ToListAsync();
         }
-        #endregion
 
-        #region GetStudent
         /// <summary>
         /// Obtem 1 estudante de acordo com o id 
         /// </summary>
@@ -69,22 +58,18 @@ namespace StudentGroupsManager.Controllers
         {
           if (_context.Students == null)
           {
-                _logger.LogInformation("[StudentsController > GetStudent] Não foi encontrado Students no contexto.");
-                return NotFound();
+              return NotFound();
           }
             var student = await _context.Students.FindAsync(id);
 
             if (student == null)
             {
-                _logger.LogInformation("[StudentsController > GetStudents] Não foi possível localizar estudante com o id informado!");
                 return NotFound();
             }
 
             return student;
         }
-        #endregion
 
-        #region PutStudent
         /// <summary>
         /// Atualiza um estudante
         /// </summary>
@@ -104,7 +89,6 @@ namespace StudentGroupsManager.Controllers
         {
             if (id != student.Id)
             {
-                _logger.LogInformation("[StudentsController > PutStudent] O id informado é diferente da entidade estudante.");
                 return BadRequest();
             }
 
@@ -114,25 +98,21 @@ namespace StudentGroupsManager.Controllers
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException dbex)
+            catch (DbUpdateConcurrencyException)
             {
                 if (!StudentExists(id))
                 {
-                    _logger.LogInformation("[StudentsController > PutStudent] Não foi possível localizar estudante com o id informado!");
                     return NotFound();
                 }
                 else
                 {
-                    _logger.LogError($"[StudentsController > PutStudent] Erro ao atualizar estudante com id {id}. Erro: {dbex.Message}", dbex);
                     throw;
                 }
             }
 
             return NoContent();
         }
-        #endregion
 
-        #region PostStudent
         /// <summary>
         /// Inclui um estudante
         /// </summary>
@@ -152,21 +132,18 @@ namespace StudentGroupsManager.Controllers
         {
           if (_context.Students == null)
           {
-                _logger.LogInformation("[StudentsController > PostStudent] Não foi encontrado Students no contexto.");
-                return Problem("Entity set 'StudentGroupsManagerContext.Students'  is null.");
+              return Problem("Entity set 'StudentGroupsManagerContext.Students'  is null.");
           }
             _context.Students.Add(student);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetStudent", new { id = student.Id }, student);
         }
-        #endregion
 
-        #region DeleteStudent
         /// <summary>
-        /// Exclui um estudante de acordo com o id 
+        /// Exclui um estudante
         /// </summary>
-        /// <param name="id"></param>
+        /// <param></param>
         /// <returns></returns>
         /// <remarks>
         /// Exemplo:
@@ -181,13 +158,11 @@ namespace StudentGroupsManager.Controllers
         {
             if (_context.Students == null)
             {
-                _logger.LogInformation("[StudentsController > Students] Não foi encontrado Students no contexto.");
                 return NotFound();
             }
             var student = await _context.Students.FindAsync(id);
             if (student == null)
             {
-                _logger.LogInformation("[StudentsController > PutStudent] Não foi possível localizar estudante com o id informado!");
                 return NotFound();
             }
 
@@ -196,13 +171,10 @@ namespace StudentGroupsManager.Controllers
 
             return NoContent();
         }
-        #endregion
 
-        #region StudentExists
         private bool StudentExists(int id)
         {
             return (_context.Students?.Any(e => e.Id == id)).GetValueOrDefault();
         }
-        #endregion
     }
 }
