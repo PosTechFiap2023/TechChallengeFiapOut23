@@ -103,6 +103,23 @@ public class GroupController : ControllerBase
     }
     
     /// <summary>
+    /// Permite um aluno sair de um grupo
+    /// </summary>
+    /// <param name="groupId"></param>
+    /// <param name="studentId"></param>
+    /// <returns></returns>
+    /// <response code="200">Retorna Sucesso</response>
+    /// <response code="401">Não Autenticado</response>
+    /// <response code="403">Não Autorizado</response>
+    /// DELETE: api/group/1/3
+    [HttpDelete("{groupId:int}/{studentId:int}")]
+    public ActionResult UnEnrollAGroup(int groupId, int studentId)
+    {
+        _studentGroupRepository.UnEnrollStudent(groupId, studentId);
+        return Ok();
+    }
+    
+    /// <summary>
     /// Exclui um grupo
     /// </summary>
     /// <param name="groupId"></param>
