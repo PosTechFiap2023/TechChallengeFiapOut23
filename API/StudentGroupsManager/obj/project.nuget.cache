@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "zMzgyVg9uWbN+H+gNlUtHLtGOUxXRRnwFYL1cDKqK04l/OffYqdXC5aQWo0EBEKM7LUiYZzebooVOW1Hlh0DxA==",
+  "dgSpecHash": "wjQDaeBc+DDT4nTmgeqguLRA9HAFgX6RVIMEIbYiEJkfZfN1gjgea8LN2xj61lOsGwOlH2EBFHJLdfH/UMgDTA==",
   "success": true,
-  "projectFilePath": "c:\\Fiap\\TechChallengeFiapOut23\\API\\StudentGroupsManager\\StudentGroupsManager.csproj",
+  "projectFilePath": "C:\\Fiap\\TechChallengeFiapOut23\\API\\StudentGroupsManager\\StudentGroupsManager.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\magai\\.nuget\\packages\\azure.core\\1.25.0\\azure.core.1.25.0.nupkg.sha512",
     "C:\\Users\\magai\\.nuget\\packages\\azure.identity\\1.7.0\\azure.identity.1.7.0.nupkg.sha512",
