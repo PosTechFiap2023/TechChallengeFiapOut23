@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using StudentGroupsManager.Entity;
+using Group = System.Text.RegularExpressions.Group;
 
 namespace StudentGroupsManager.Data
 {
@@ -19,5 +20,7 @@ namespace StudentGroupsManager.Data
         public DbSet<Student> Students { get; set; } = default!;
 
         public DbSet<TeacherCoordinator> TeacherCoordinators { get; set; } = default!;
+        public DbSet<CourseGroup> Groups { get; set; } = default!;
+        public DbSet<StudentGroup> StudentGroups { get; set; } = default!;
     }
 }

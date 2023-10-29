@@ -127,5 +127,17 @@
         <member name="M:StudentGroupsManager.Migrations.VersaoStudentsTeacherCoordinator.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
+        <member name="T:StudentGroupsManager.Migrations.VersaoGroupsCreation">
+            <inheritdoc />
+        </member>
+        <member name="M:StudentGroupsManager.Migrations.VersaoGroupsCreation.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:StudentGroupsManager.Migrations.VersaoGroupsCreation.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:StudentGroupsManager.Migrations.VersaoGroupsCreation.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
     </members>
 </doc>
