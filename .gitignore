@@ -50,3 +50,4 @@ bld/
 msbuild.log
 msbuild.err
 msbuild.wrn
+/API/StudentGroupsManager/Entity/Group.cs
