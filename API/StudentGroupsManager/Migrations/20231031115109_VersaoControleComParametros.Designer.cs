@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StudentGroupsManager.Data;
 
@@ -11,9 +12,11 @@ using StudentGroupsManager.Data;
 namespace StudentGroupsManager.Migrations
 {
     [DbContext(typeof(StudentGroupsManagerContext))]
-    partial class StudentGroupsManagerContextModelSnapshot : ModelSnapshot
+    [Migration("20231031115109_VersaoControleComParametros")]
+    partial class VersaoControleComParametros
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
