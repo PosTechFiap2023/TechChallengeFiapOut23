@@ -8,9 +8,9 @@ namespace StudentGroupsManager.Entity
 
         public bool IsEsnabled { get; set; }
 
-        public int GroupId { get; set; }
+        public int CourseId { get; set; }
 
         [JsonIgnore]
-        public CourseGroup Group { get; set; }
+        public Course Course { get; set; }
     }
 }

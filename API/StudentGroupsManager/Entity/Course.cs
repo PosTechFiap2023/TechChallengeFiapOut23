@@ -8,5 +8,7 @@ namespace StudentGroupsManager.Entity
         public string NameCourse { get; set; }
         [JsonIgnore]
         public ICollection<CourseGroup> Groups { get; set; }
+        [JsonIgnore]
+        public ICollection<Parametros> Parametros { get; set; }
     }
 }

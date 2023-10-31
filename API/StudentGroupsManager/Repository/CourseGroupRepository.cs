@@ -32,7 +32,7 @@ public class CourseGroupRepository : ICourseGroupRepository
         // métodos necessários devido implementação do repositório padrão
     }
 
-    public IList<GroupGetDTO> GetAll()
+    public IList<GroupGetDTO> GetAllWithDto()
     {
         var response = new List<GroupGetDTO>();
         var groups = _context.Groups
@@ -129,6 +129,20 @@ public class CourseGroupRepository : ICourseGroupRepository
         _context.SaveChanges();
     }
 
+    public void UnEnrollAGroup(int groupId, int studentId)
+    {
+        var group = GetById(groupId);
+
+        if (group.CreatorId == studentId)
+            throw new Exception("O criador não pode deixar o grupo, por favor exclua o grupo.");
+
+        group.StudentsJoined--;
+
+        if (group.StudentsJoined < group.MaxNumberOfStudents) group.IsClosed = false;
+
+        _context.SaveChanges();
+    }
+
     public void CreateAGroup(GroupCreateDTO dto)
     {
         var entity = new CourseGroup()
@@ -141,5 +155,17 @@ public class CourseGroupRepository : ICourseGroupRepository
         if (dto.MaxNumberOfStudents is not null) entity.MaxNumberOfStudents = dto.MaxNumberOfStudents.Value;
         
         Insert(entity);
+    }
+
+    public void CloseGroupsWhenDeadlineReached(int courseId)
+    {
+        var groups = _context.Groups.Where(g => g.CourseId == courseId).ToList();
+
+        foreach (var group in groups)
+        {
+            group.IsClosed = true;
+        }
+
+        _context.SaveChanges();
     }
 }
