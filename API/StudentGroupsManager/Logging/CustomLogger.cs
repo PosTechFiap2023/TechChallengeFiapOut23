@@ -32,7 +32,7 @@
 
         private void WriteTextToFile(string msg)
         {
-            var filePath = Path.Combine(Environment.CurrentDirectory,"bin","Logs", $@"LOG-{DateTime.Now:yyyy-MM-dd}.txt");
+            var filePath = Path.Combine(Environment.CurrentDirectory, "bin", "Logs", $@"LOG-{DateTime.Now:yyyy-MM-dd}.txt");
 
             if (!File.Exists(filePath))
             {

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using System.Reflection;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -7,14 +9,16 @@ using StudentGroupsManager.Interface;
 using StudentGroupsManager.Logging;
 using StudentGroupsManager.Repository;
 using StudentGroupsManager.Services;
-using System.Reflection;
-using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<ICourseRepository, CourseRepository>();
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 builder.Services.AddScoped<ITeacherCoordinatorRepository, TeacherCoordinatorRepository>();
+builder.Services.AddScoped<IParametrosRepository, ParametrosRepository>();
+builder.Services.AddScoped<ICourseGroupRepository, CourseGroupRepository>();
+builder.Services.AddScoped<IStudentGroupRepository, StudentGroupRepository>();
 
 builder.Services.AddDbContext<StudentGroupsManagerContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("StudentGroupsManagerContext") ?? throw new InvalidOperationException("Connection string 'StudentGroupsManagerContext' not found.")));
@@ -62,11 +66,17 @@ builder.Services.AddSwaggerGen(c =>
         });
 });
 
+builder.Services.AddCors(opt =>
+{
+    opt.AddPolicy("AllowAll", police => police.AllowAnyHeader().AllowAnyHeader().AllowAnyMethod());
+});
+
 builder.Logging.ClearProviders();
 builder.Logging.AddProvider(new CustomLoggerProvider(new CustomLoggerProviderConfiguration()
 {
     LogLevel = LogLevel.Information
 }));
+
 
 var configurarion = new ConfigurationBuilder()
                     .AddJsonFile("appsettings.json")
@@ -106,6 +116,8 @@ app.UseReDoc(c =>
     c.DocumentTitle = "Gerenciador de alunos e grupos";
     c.RoutePrefix = "";
 });
+
+app.UseCors(police => police.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
 app.UseHttpsRedirection();
 

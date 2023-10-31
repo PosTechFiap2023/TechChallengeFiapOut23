@@ -14,32 +14,35 @@ namespace StudentGroupsManager.Repository
 
         public void Delete(TeacherCoordinator entity)
         {
-            throw new NotImplementedException();
+            _context.TeacherCoordinators.Remove(GetById(entity.Id));
+            _context.SaveChanges();
         }
 
         public TeacherCoordinator GetById(int id)
         {
-            throw new NotImplementedException();
+            return _context.TeacherCoordinators.FirstOrDefault(s => s.Id == id);
+        }
+
+        IList<TeacherCoordinator> IRepository<TeacherCoordinator>.GetAll()
+        {
+            return _context.TeacherCoordinators.ToList();
+        }
+
+        public void Insert(TeacherCoordinator entity)
+        {
+            _context.TeacherCoordinators.Add(entity);
+            _context.SaveChanges();
+        }
+
+        public void Update(TeacherCoordinator entity)
+        {
+            _context.TeacherCoordinators.Update(entity);
+            _context.SaveChanges();
         }
 
         public TeacherCoordinator GetByRMPassword(string rp, string password)
         {
             return _context.TeacherCoordinators.FirstOrDefault(s => s.RP == rp && s.Password == password);
-        }
-
-        public void Insert(TeacherCoordinator entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<TeacherCoordinator> GetAll()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Update(TeacherCoordinator entity)
-        {
-            throw new NotImplementedException();
         }
     }
 }

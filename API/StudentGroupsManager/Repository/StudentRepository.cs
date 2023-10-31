@@ -14,32 +14,35 @@ namespace StudentGroupsManager.Repository
 
         public void Delete(Student entity)
         {
-            throw new NotImplementedException();
+            _context.Students.Remove(GetById(entity.Id));
+            _context.SaveChanges();
         }
 
         public Student GetById(int id)
         {
-            throw new NotImplementedException();
+            return _context.Students.FirstOrDefault(s => s.Id == id);
+        }
+
+        IList<Student> IRepository<Student>.GetAll()
+        {
+            return _context.Students.ToList();
+        }
+
+        public void Insert(Student entity)
+        {
+            _context.Students.Add(entity);
+            _context.SaveChanges();
+        }
+
+        public void Update(Student entity)
+        {
+            _context.Students.Update(entity);
+            _context.SaveChanges();
         }
 
         public Student GetByRMPassword(string rm, string password)
         {
             return _context.Students.FirstOrDefault(s => s.RA == rm && s.Password == password);
-        }
-
-        public void Insert(Student entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<Student> GetAll()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Update(Student entity)
-        {
-            throw new NotImplementedException();
         }
     }
 }

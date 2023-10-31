@@ -8,19 +8,19 @@ namespace StudentGroupsManager.Controllers
     [Route("api/[controller]")]
     [ApiController]
     //[Authorize(Roles = "TeacherCoordinators")]
-    public class TeacherCoordinatorsController : ControllerBase
+    public class ParametrosController : ControllerBase
     {
         private ILogger<StudentsController> _logger;
-        private readonly ITeacherCoordinatorRepository _teacherCoordinatorRepository;
+        private readonly IParametrosRepository _parametrosRepository;
 
-        public TeacherCoordinatorsController(ITeacherCoordinatorRepository teacherCoordinatorRepository, ILogger<StudentsController> logger)
+        public ParametrosController(IParametrosRepository parametrosRepository, ILogger<StudentsController> logger)
         {
-            _teacherCoordinatorRepository = teacherCoordinatorRepository;
+            _parametrosRepository = parametrosRepository;
             _logger = logger;
         }
 
         /// <summary>
-        /// Obtem Lista de professores e coordenadores 
+        /// Obtem Lista de parametros 
         /// </summary>
         /// <param></param>
         /// <returns></returns>
@@ -31,16 +31,16 @@ namespace StudentGroupsManager.Controllers
         /// <response code="200">Retorna Sucesso</response>
         /// <response code="401">Não Autenticado</response>
         /// <response code="403">Não Autorizado</response>
-        // GET: api/TeacherCoordinators
+        // GET: api/Parametros
         //[Authorize]
         [HttpGet]
-        public ActionResult<IEnumerable<TeacherCoordinator>> GetTeacherCoordinators()
+        public ActionResult<IEnumerable<Parametros>> GetParametros()
         {
-            return Ok(_teacherCoordinatorRepository.GetAll());
+            return Ok(_parametrosRepository.GetAll());
         }
 
         /// <summary>
-        /// Obtem 1 professor ou coordenador de acordo com o id 
+        /// Obtem 1 parametro de acordo com o id 
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -52,22 +52,22 @@ namespace StudentGroupsManager.Controllers
         /// <response code="200">Retorna Sucesso</response>
         /// <response code="401">Não Autenticado</response>
         /// <response code="403">Não Autorizado</response>
-        // GET: api/TeacherCoordinators/5
+        // GET: api/Parametro/5
         //[Authorize]
         [HttpGet("{id}")]
-        public ActionResult<TeacherCoordinator> GetTeacherCoordinator(int id)
+        public ActionResult<Parametros> GetParametro(int id)
         {
-            var teacherCoordinator = _teacherCoordinatorRepository.GetById(id);
-            if (teacherCoordinator == null)
+            var parametro = _parametrosRepository.GetById(id);
+            if (parametro == null)
             {
-                _logger.LogInformation("Não foi encontrado professor ou coordenador com o id informado!");
+                _logger.LogInformation("Não foi encontrado parametro com o id informado!");
                 return NotFound();
             }
-            return Ok(teacherCoordinator);
+            return Ok(_parametrosRepository.GetById(id));
         }
 
         /// <summary>
-        /// Atualiza um professor ou coordenador
+        /// Atualiza um parametro
         /// </summary>
         /// <param></param>
         /// <returns></returns>
@@ -78,24 +78,24 @@ namespace StudentGroupsManager.Controllers
         /// <response code="200">Retorna Sucesso</response>
         /// <response code="401">Não Autenticado</response>
         /// <response code="403">Não Autorizado</response>
-        // PUT: api/TeacherCoordinators/5
+        // PUT: api/Parametros/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         //[Authorize(Roles = "Teacher")]
         [HttpPut("{id}")]
-        public ActionResult PutTeacherCoordinator(int id, TeacherCoordinator teacherCoordinator)
+        public ActionResult PutParametros(int id, Parametros parametros)
         {
-            if (id != teacherCoordinator.Id)
+            if (id != parametros.Id)
             {
                 _logger.LogInformation("Requisição Inválida");
                 return BadRequest();
             }
 
-            _teacherCoordinatorRepository.Update(teacherCoordinator);
+            _parametrosRepository.Update(parametros);
             return Ok();
         }
 
         /// <summary>
-        /// Inclui um professor ou coordenador
+        /// Inclui um parametro
         /// </summary>
         /// <param></param>
         /// <returns></returns>
@@ -106,23 +106,23 @@ namespace StudentGroupsManager.Controllers
         /// <response code="200">Retorna Sucesso</response>
         /// <response code="401">Não Autenticado</response>
         /// <response code="403">Não Autorizado</response>
-        // POST: api/TeacherCoordinators
+        // POST: api/Parametros
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         //[Authorize(Roles = "Teacher")]
         [HttpPost]
-        public ActionResult<TeacherCoordinator> PostTeacherCoordinator(TeacherCoordinator teacherCoordinator)
+        public ActionResult<Parametros> PostParametros(Parametros parametros)
         {
-            if (_teacherCoordinatorRepository == null)
+            if (_parametrosRepository == null)
             {
-                return Problem("Entity set 'StudentGroupsManagerContext.Students'  is null.");
+                return Problem("Entity set 'StudentGroupsManagerContext.Parametros'  is null.");
             }
-            _teacherCoordinatorRepository.Insert(teacherCoordinator);
+            _parametrosRepository.Insert(parametros);
 
-            return CreatedAtAction("GetTeacherCoordinator", new { id = teacherCoordinator.Id }, teacherCoordinator);
+            return CreatedAtAction("GetParametros", new { id = parametros.Id }, parametros);
         }
 
         /// <summary>
-        /// Exclui um professor ou coordenador
+        /// Exclui um parametro
         /// </summary>
         /// <param></param>
         /// <returns></returns>
@@ -133,25 +133,25 @@ namespace StudentGroupsManager.Controllers
         /// <response code="200">Retorna Sucesso</response>
         /// <response code="401">Não Autenticado</response>
         /// <response code="403">Não Autorizado</response>
-        // DELETE: api/TeacherCoordinators/5
+        // DELETE: api/Parametros/5
         //[Authorize(Roles = "Teacher")]
         [HttpDelete("{id}")]
-        public ActionResult DeleteTeacherCoordinator(TeacherCoordinator teacherCoordinator)
+        public ActionResult DeleteParametros(Parametros parametros)
         {
-            if (_teacherCoordinatorRepository == null)
+            if (_parametrosRepository == null)
             {
                 return NotFound();
             }
-            var T = _teacherCoordinatorRepository.GetById(teacherCoordinator.Id);
+            var T = _parametrosRepository.GetById(parametros.Id);
             if (T == null)
             {
-                _logger.LogInformation("Professor ou Coordenador não encontrado ao deletar");
+                _logger.LogInformation("Parametro não encontrado ao deletar");
                 return NotFound();
             }
 
-            _teacherCoordinatorRepository.Delete(teacherCoordinator);
+            _parametrosRepository.Delete(parametros);
 
-            return CreatedAtAction("GetTeacherCoordinator", new { id = teacherCoordinator.Id }, teacherCoordinator);
+            return CreatedAtAction("GetParametros", new { id = parametros.Id }, parametros);
         }
     }
 }
