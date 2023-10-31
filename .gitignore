@@ -2,10 +2,6 @@
 # Este arquivo .gitignore foi criado automaticamente pelo Microsoft(R) Visual Studio.
 ################################################################################
 
-/API/StudentGroupsManager/DTO/CourseDTO.cs
-/API/StudentGroupsManager/DTO/ParametrosDTO.cs
-/API/StudentGroupsManager/DTO/StudentDTO.cs
-/API/StudentGroupsManager/DTO/TeacherCoordinatorDTO.cs
 
 *.swp
 *.*~
@@ -50,4 +46,3 @@ bld/
 msbuild.log
 msbuild.err
 msbuild.wrn
-/API/StudentGroupsManager/Entity/Group.cs
